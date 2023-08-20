@@ -8,7 +8,7 @@ const auth = require('../middlewares/auth');
 // Sign Ip Route
 authRouter.post('/api/signup', async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phoneNumber } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -23,6 +23,7 @@ authRouter.post('/api/signup', async (req, res) => {
       email,
       password: hashedPassword,
       name,
+      phoneNumber,
     });
     user = await user.save();
 
