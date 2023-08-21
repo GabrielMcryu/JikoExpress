@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ratingSchema = required('./rating');
+const ratingSchema = require('./rating');
 
 const restaurantSchema = mongoose.Schema({
   userId: {

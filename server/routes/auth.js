@@ -1,5 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const User = require('../models/user');
+const Restaurant = require('../models/restaurant');
 const bcryptjs = require('bcryptjs');
 const authRouter = express.Router();
 const jwt = require('jsonwebtoken');
@@ -24,6 +26,7 @@ authRouter.post('/api/signup', async (req, res) => {
       password: hashedPassword,
       name,
       phoneNumber,
+      role: 'customer',
     });
     user = await user.save();
 
@@ -32,6 +35,53 @@ authRouter.post('/api/signup', async (req, res) => {
     res.json(user);
   } catch (e) {
     res.status(500).json({ error: e.message });
+  }
+});
+
+authRouter.post('/api/restaurant-signup', async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const { name, email, password, phoneNumber, restaurantName } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ msg: 'User with same email already exists!' });
+    }
+
+    const hashedPassword = await bcryptjs.hash(password, 8);
+
+    let user = new User({
+      email,
+      password: hashedPassword,
+      name,
+      phoneNumber,
+      role: 'restaurant',
+    });
+    user = await user.save();
+
+    const userId = user._id;
+
+    let restaurant = new Restaurant({
+      userId,
+      name: restaurantName,
+    });
+
+    restaurant = await restaurant.save();
+
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(200).json({ message: 'Transaction successful' });
+  } catch (e) {
+    await session.abortTransaction();
+    session.endSession();
+
+    console.error(error);
+    res.status(500).json({ error: 'Transaction failed' });
   }
 });
 
@@ -52,7 +102,7 @@ authRouter.post('/api/signin', async (req, res) => {
       return res.status(400).json({ msg: 'Incorrect password.' });
     }
 
-    const token = jwt.sign({ id: user._id, type: user.type }, 'passwordKey');
+    const token = jwt.sign({ id: user._id, role: user.role }, 'passwordKey');
     res.json({ token, ...user._doc });
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -77,7 +127,7 @@ authRouter.post('/tokenIsValid', async (req, res) => {
 // get user data
 authRouter.get('/', auth, async (req, res) => {
   const user = await User.findById(req.user);
-  res.json({ ...user_doc, token: req.token });
+  res.json({ ...user._doc, token: req.token });
 });
 
 module.exports = authRouter;

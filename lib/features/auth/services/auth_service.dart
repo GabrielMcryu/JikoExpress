@@ -4,6 +4,8 @@ import 'package:jiko_express/constants/error_handling.dart';
 import 'package:jiko_express/constants/global_variables.dart';
 import 'package:jiko_express/constants/utils.dart';
 import 'package:jiko_express/providers/user_provider.dart';
+import 'package:jiko_express/features/customer/screens/customer_home_screen.dart';
+import 'package:jiko_express/features/restaurant/screens/restaurant_home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -55,6 +57,42 @@ class AuthService {
     }
   }
 
+  void signUpRestaurant({
+    required BuildContext context,
+    required String name,
+    required String email,
+    required String password,
+    required String phoneNumber,
+    required String restaurantName,
+  }) async {
+    try {
+      http.Response res = await http.post(
+          Uri.parse('$uri/api/restaurant-signup'),
+          body: jsonEncode({
+            'name': name,
+            'email': email,
+            'password': password,
+            'phoneNumber': phoneNumber,
+            'restaurantName': restaurantName,
+          }),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          }
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          showSnackBar(context, 'Account created! Login with the same credentials');
+        },
+      );
+    } catch(e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   // sign in user
   void signInUser({
     required BuildContext context,
@@ -90,11 +128,31 @@ class AuthService {
                 utf8.fuse(base64).decode(base64.normalize(encodedPayload));
             print('payload: $payloadData');
             Payload decodedPayload = Payload.fromJson(jsonDecode(payloadData));
-            String? type = decodedPayload.type;
-            showSnackBar(context, 'logged in');
+            String? role = decodedPayload.role;
+            if (role == 'customer') {
+              // ignore: use_build_context_synchronously
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                CustomerHomeScreen.routeName,
+                    (route) => false,
+              );
+            } else if (role == 'restaurant') {
+              // ignore: use_build_context_synchronously
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                RestaurantHomeScreen.routeName,
+                    (route) => false,
+              );
+            }
           } else {
             showSnackBar(context, 'Error: Token was null');
           }
+          // // ignore: use_build_context_synchronously
+          // Navigator.pushNamedAndRemoveUntil(
+          //   context,
+          //   CustomerHomeScreen.routeName,
+          //       (route) => false,
+          // );
         },
       );
     } catch(e) {

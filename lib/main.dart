@@ -4,6 +4,7 @@ import 'constants/global_variables.dart';
 import 'features/auth/services/auth_service.dart';
 import 'features/auth/services/auth_service.dart';
 import 'features/auth/screens/customer_auth_screen.dart';
+import 'features/auth/screens/auth_screen.dart';
 
 import 'providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       onGenerateRoute: (settings) => generateRoute(settings),
-      home: const CustomerAuthScreen()
+      home: const AuthScreen()
     );
   }
 }

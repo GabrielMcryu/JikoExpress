@@ -1,14 +1,14 @@
 class Payload {
   String? id;
-  String? type;
+  String? role;
   int? iat;
 
-  Payload({this.id, this.type, this.iat});
+  Payload({this.id, this.role, this.iat});
 
   factory Payload.fromJson(Map<String, dynamic> json) {
     return Payload(
       id: json['id'],
-      type: json['type'],
+      role: json['role'],
       iat: json['iat'],
     );
   }
@@ -16,7 +16,7 @@ class Payload {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['id'] = id;
-    data['type'] = type;
+    data['role'] = role;
     data['iat'] = iat;
     return data;
   }
