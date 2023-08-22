@@ -9,15 +9,15 @@ enum Auth {
   signup,
 }
 
-class RestaurantAuthScreen extends StatefulWidget {
-  static const String routeName = '/restaurant-auth-screen';
-  const RestaurantAuthScreen({super.key});
+class RiderAuthScreen extends StatefulWidget {
+  static const String routeName = '/rider-auth-screen';
+  const RiderAuthScreen({super.key});
 
   @override
-  State<RestaurantAuthScreen> createState() => _RestaurantAuthScreenState();
+  State<RiderAuthScreen> createState() => _RiderAuthScreenState();
 }
 
-class _RestaurantAuthScreenState extends State<RestaurantAuthScreen> {
+class _RiderAuthScreenState extends State<RiderAuthScreen> {
   Auth _auth = Auth.signup;
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
@@ -27,7 +27,7 @@ class _RestaurantAuthScreenState extends State<RestaurantAuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _restaurantNameController = TextEditingController();
+  final TextEditingController _drivingLicenseNumberController = TextEditingController();
 
   @override
   void dispose() {
@@ -36,17 +36,17 @@ class _RestaurantAuthScreenState extends State<RestaurantAuthScreen> {
     _emailController.dispose();
     _passwordController.dispose();
     _phoneNumberController.dispose();
-    _restaurantNameController.dispose();
+    _drivingLicenseNumberController.dispose();
   }
 
   void signUpRestaurant() {
-    authService.signUpRestaurant(
-        context: context,
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        phoneNumber: _phoneNumberController.text,
-        restaurantName: _restaurantNameController.text,
+    authService.signUpRider(
+      context: context,
+      name: _nameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+      phoneNumber: _phoneNumberController.text,
+      drivingLicenseNumber: _drivingLicenseNumberController.text,
     );
   }
 
@@ -120,8 +120,8 @@ class _RestaurantAuthScreenState extends State<RestaurantAuthScreen> {
                             hintText: 'Phone Number',
                           ),
                           CustomTextField(
-                            controller: _restaurantNameController,
-                            hintText: 'Restaurant Name',
+                            controller: _drivingLicenseNumberController,
+                            hintText: 'Driving License Number',
                           ),
                           const SizedBox(height: 10),
                           CustomTextField(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'features/auth/screens/customer_auth_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
 import 'features/auth/screens/restaurant_auth_screen.dart';
+import 'features/auth/screens/rider_auth_screen.dart';
 import 'features/customer/screens/customer_home_screen.dart';
 import 'features/restaurant/screens/restaurant_home_screen.dart';
 import 'features/rider/screens/rider_home_screen.dart';
@@ -23,6 +24,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         return MaterialPageRoute(
           settings: routeSettings,
           builder: (_) => const RestaurantAuthScreen(),
+        );
+      case RiderAuthScreen.routeName:
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => const RiderAuthScreen(),
         );
       case CustomerHomeScreen.routeName:
         return MaterialPageRoute(

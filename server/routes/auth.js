@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const Restaurant = require('../models/restaurant');
+const Rider = require('../models/rider');
 const bcryptjs = require('bcryptjs');
 const authRouter = express.Router();
 const jwt = require('jsonwebtoken');
@@ -71,6 +72,54 @@ authRouter.post('/api/restaurant-signup', async (req, res) => {
     });
 
     restaurant = await restaurant.save();
+
+    await session.commitTransaction();
+    session.endSession();
+
+    res.status(200).json({ message: 'Transaction successful' });
+  } catch (e) {
+    await session.abortTransaction();
+    session.endSession();
+
+    console.error(error);
+    res.status(500).json({ error: 'Transaction failed' });
+  }
+});
+
+authRouter.post('/api/rider-signup', async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const { name, email, password, phoneNumber, drivingLicenseNumber } =
+      req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ msg: 'User with same email already exists!' });
+    }
+
+    const hashedPassword = await bcryptjs.hash(password, 8);
+
+    let user = new User({
+      email,
+      password: hashedPassword,
+      name,
+      phoneNumber,
+      role: 'rider',
+    });
+    user = await user.save();
+
+    const userId = user._id;
+
+    let rider = new Rider({
+      userId,
+      drivingLicenseNumber,
+    });
+
+    rider = await rider.save();
 
     await session.commitTransaction();
     session.endSession();

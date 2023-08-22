@@ -3,6 +3,7 @@ import 'package:jiko_express/constants/global_variables.dart';
 import 'package:jiko_express/common/widgets/custom_button.dart';
 import 'customer_auth_screen.dart';
 import 'restaurant_auth_screen.dart';
+import 'rider_auth_screen.dart';
 
 class AuthScreen extends StatelessWidget {
   static const String routeName = '/auth-screen';
@@ -14,6 +15,10 @@ class AuthScreen extends StatelessWidget {
 
   void navigateToRestaurantAuthScreen(BuildContext context) {
     Navigator.pushNamed(context, RestaurantAuthScreen.routeName);
+  }
+
+  void navigateToRiderAuthScreen(BuildContext context) {
+    Navigator.pushNamed(context, RiderAuthScreen.routeName);
   }
 
   @override
@@ -48,7 +53,7 @@ class AuthScreen extends StatelessWidget {
             CustomButton(
                 text: 'Log in as a Rider',
                 onTap: () {
-
+                  navigateToRiderAuthScreen(context);
                 }
             ),
           ],
