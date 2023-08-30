@@ -5,6 +5,7 @@ require('dotenv').config();
 
 // IMPORTS FROM OTHER FILES
 const authRouter = require('./routes/auth');
+const restaurantRouter = require('./routes/restaurant');
 
 // mongodb credentials
 const username = process.env.APP_USERNAME;
@@ -18,6 +19,7 @@ const DB = `mongodb+srv://${username}:${password}@cluster0.8sycumm.mongodb.net/?
 // middleware
 app.use(express.json());
 app.use(authRouter);
+app.use(restaurantRouter);
 
 // Connections
 mongoose
