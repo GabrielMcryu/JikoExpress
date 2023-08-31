@@ -1,5 +1,5 @@
 import 'package:jiko_express/router.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'constants/global_variables.dart';
 import 'features/auth/services/auth_service.dart';
 import 'features/auth/services/auth_service.dart';
@@ -10,7 +10,8 @@ import 'providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: ".env");
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserProvider(),)

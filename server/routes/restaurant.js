@@ -1,10 +1,10 @@
 const express = require('express');
 const restaurantRouter = express.Router();
 const restaurant = require('../middlewares/restaurant');
-const { User } = require('../models/user');
-const { Meal } = require('../models/meal');
+const User = require('../models/user');
+const Meal = require('../models/meal');
 const { PromiseProvider } = require('mongoose');
-const { Restaurant } = require('../models/restaurant');
+const Restaurant = require('../models/restaurant');
 
 // Add Meal
 restaurantRouter.post('/restaurant/add-meal', restaurant, async (req, res) => {
@@ -13,7 +13,7 @@ restaurantRouter.post('/restaurant/add-meal', restaurant, async (req, res) => {
 
     let user = await User.findById(req.user);
 
-    const restaurantData = await Restaurant.findOne(user._id);
+    const restaurantData = await Restaurant.findOne({ userId: user._id });
 
     if (!restaurantData) {
       return res.status(404).json({ message: 'Restaurant not found' });
@@ -36,9 +36,15 @@ restaurantRouter.post('/restaurant/add-meal', restaurant, async (req, res) => {
 
 // Get meal by restaurant
 restaurantRouter.get('/restaurant/get-meals', restaurant, async (req, res) => {
-  let user = await User.findById(req.user);
+  const user = await User.findById(req.user);
 
-  const restaurantData = await Restaurant.findOne(user._id);
+  const restaurantData = await Restaurant.findOne({ userId: user._id });
+
+  if (!restaurantData) {
+    return res
+      .status(404)
+      .json({ error: 'Restaurant not found for this user' });
+  }
 
   const meals = await Meal.find({ restaurantId: restaurantData._id });
   res.json(meals);
@@ -47,5 +53,20 @@ restaurantRouter.get('/restaurant/get-meals', restaurant, async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+// Delete the meal
+restaurantRouter.post(
+  '/restaurant/delete-meal',
+  restaurant,
+  async (req, res) => {
+    try {
+      const { id } = req.body;
+      let meal = await Meal.findByIdAndDelete(id);
+      res.json(meal);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  }
+);
 
 module.exports = restaurantRouter;

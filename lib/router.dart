@@ -7,6 +7,7 @@ import 'features/auth/screens/rider_auth_screen.dart';
 import 'features/customer/screens/customer_home_screen.dart';
 import 'features/restaurant/screens/restaurant_home_screen.dart';
 import 'features/rider/screens/rider_home_screen.dart';
+import 'features/restaurant/screens/restaurant_add_meal_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch(routeSettings.name) {
@@ -39,6 +40,11 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         return MaterialPageRoute(
           settings: routeSettings,
           builder: (_) => const RestaurantHomeScreen(),
+        );
+      case RestaurantAddMealScreen.routeName:
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => const RestaurantAddMealScreen(),
         );
       case RiderHomeScreen.routeName:
         return MaterialPageRoute(

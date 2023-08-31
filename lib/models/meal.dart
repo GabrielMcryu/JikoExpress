@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 class Meal {
-  final String id;
-  final String restaurantId;
+  final String? id;
+  final String? restaurantId;
   final String name;
   final String description;
   final List<String> images;
@@ -10,8 +10,8 @@ class Meal {
   final double price;
 
   Meal({
-    required this.id,
-    required this.restaurantId,
+    this.id,
+    this.restaurantId,
     required this.name,
     required this.description,
     required this.images,
