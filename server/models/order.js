@@ -23,6 +23,14 @@ const orderSchema = mongoose.Schema({
     required: true,
     type: String,
   },
+  restaurantId: {
+    required: true,
+    type: String,
+  },
+  riderId: {
+    type: String,
+    default: '',
+  },
   orderedAt: {
     type: Number,
     required: true,

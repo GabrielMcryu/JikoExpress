@@ -36,15 +36,15 @@ const userSchema = mongoose.Schema({
     type: String,
     default: 'user',
   },
-  // cart: [
-  //   {
-  //     meal: mealSchema,
-  //     quantity: {
-  //       type: Number,
-  //       required: true,
-  //     },
-  //   },
-  // ],
+  cart: [
+    {
+      meal: mealSchema,
+      quantity: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 });
 
 const User = mongoose.model('User', userSchema);
