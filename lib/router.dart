@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'models/restaurant.dart';
 import 'models/meal.dart';
+import 'models/order.dart';
 import 'features/auth/screens/customer_auth_screen.dart';
 import 'features/auth/screens/auth_screen.dart';
 import 'features/auth/screens/restaurant_auth_screen.dart';
@@ -12,6 +13,8 @@ import 'features/rider/screens/rider_home_screen.dart';
 import 'features/restaurant/screens/restaurant_add_meal_screen.dart';
 import 'features/customer/screens/customer_restaurant_meal_screen.dart';
 import 'features/customer/screens/customer_meal_detail_screen.dart';
+import 'features/customer/screens/customer_address_screen.dart';
+import 'features/customer/screens/customer_order_detail_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch(routeSettings.name) {
@@ -54,6 +57,22 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
           settings: routeSettings,
           builder: (_) => CustomerMealDetailScreen(
               meal: meal
+          ),
+        );
+      case CustomerAddressScreen.routeName:
+        var totalAmount = routeSettings.arguments as String;
+        return MaterialPageRoute(
+          settings: routeSettings,
+            builder: (_) => CustomerAddressScreen(
+                totalAmount: totalAmount,
+            ),
+        );
+      case CustomerOrderDetailsScreen.routeName:
+        var order = routeSettings.arguments as Order;
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => CustomerOrderDetailsScreen(
+            order: order,
           ),
         );
       case RestaurantHomeScreen.routeName:

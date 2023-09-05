@@ -147,6 +147,41 @@ class CustomerServices {
     }
   }
 
+  void saveUserAddress({
+    required BuildContext context,
+    required String address,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/customer/save-user-address'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'address': address,
+        }),
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          User user = userProvider.user.copyWith(
+            address: jsonDecode(res.body)['address'],
+          );
+
+          userProvider.setUserFromModel(user);
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
   void placeOrder({
     required BuildContext context,
     required String address,
@@ -155,7 +190,7 @@ class CustomerServices {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
 
     try {
-      http.Response res = await http.post(Uri.parse('$uri/api/order'),
+      http.Response res = await http.post(Uri.parse('$uri/customer/order'),
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             'x-auth-token': userProvider.user.token,

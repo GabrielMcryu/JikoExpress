@@ -83,6 +83,19 @@ customerRouter.delete(
   }
 );
 
+// save user address
+customerRouter.post('/customer/save-user-address', auth, async (req, res) => {
+  try {
+    const { address } = req.body;
+    let user = await User.findById(req.user);
+    user.address = address;
+    user = await user.save();
+    res.json(user);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 // order meal
 customerRouter.post('/customer/order', auth, async (req, res) => {
   try {
