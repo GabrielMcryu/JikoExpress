@@ -61,10 +61,11 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                )
+                ),
               ],
             ),
-          )),
+          ),
+      ),
         body: pages[_page],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _page,
@@ -134,7 +135,7 @@ class _RestaurantHomeScreenState extends State<RestaurantHomeScreen> {
               ),
               label: '',
             ),
-            // POSTS
+            // ACCOUNT
             BottomNavigationBarItem(
               icon: Container(
                 width: bottomBarWidth,

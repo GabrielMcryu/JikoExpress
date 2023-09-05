@@ -2,7 +2,7 @@ const express = require('express');
 const customerRouter = express.Router();
 const auth = require('../middlewares/auth');
 const User = require('../models/user');
-const Meal = require('../models/meal');
+const { Meal } = require('../models/meal');
 const Restaurant = require('../models/restaurant');
 const Order = require('../models/order');
 
@@ -27,7 +27,7 @@ customerRouter.get('/customer/meals/:restaurantId', auth, async (req, res) => {
   }
 });
 
-customerRouter.post('/api/add-to-cart', auth, async (req, res) => {
+customerRouter.post('/customer/add-to-cart', auth, async (req, res) => {
   try {
     const { id } = req.body;
     const meal = await Meal.findById(id);
@@ -57,30 +57,34 @@ customerRouter.post('/api/add-to-cart', auth, async (req, res) => {
   }
 });
 
-customerRouter.delete('/api/remove-from-cart/:id', auth, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const meal = await Meal.findById(id);
-    let user = await User.findById(req.user);
+customerRouter.delete(
+  '/customer/remove-from-cart/:id',
+  auth,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const meal = await Meal.findById(id);
+      let user = await User.findById(req.user);
 
-    for (let i = 0; i < user.cart.length; i++) {
-      if (user.cart[i].meal._id.equals(meal._id)) {
-        if (user.cart[i].quantity == 1) {
-          user.cart.splicae(i, 1);
-        } else {
-          user.cart[i].quantity -= 1;
+      for (let i = 0; i < user.cart.length; i++) {
+        if (user.cart[i].meal._id.equals(meal._id)) {
+          if (user.cart[i].quantity == 1) {
+            user.cart.splicae(i, 1);
+          } else {
+            user.cart[i].quantity -= 1;
+          }
         }
       }
+      user = await user.save();
+      res.json(user);
+    } catch (e) {
+      res.status(500).json({ error: e.message });
     }
-    user = await user.save();
-    res.json(user);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
   }
-});
+);
 
 // order meal
-customerRouter.post('/api/order', auth, async (req, res) => {
+customerRouter.post('/customer/order', auth, async (req, res) => {
   try {
     const { cart, totalPrice, address } = req.body;
     let meals = [];
@@ -113,7 +117,7 @@ customerRouter.post('/api/order', auth, async (req, res) => {
   }
 });
 
-customerRouter.get('/api/orders/me', auth, async (req, res) => {
+customerRouter.get('/customer/orders/me', auth, async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user });
     res.json(orders);
