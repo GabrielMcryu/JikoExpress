@@ -13,6 +13,10 @@ const riderSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    default: 'available',
+  },
 });
 
 const Rider = mongoose.model('Rider', riderSchema);

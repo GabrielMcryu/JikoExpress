@@ -7,6 +7,7 @@ require('dotenv').config();
 const authRouter = require('./routes/auth');
 const restaurantRouter = require('./routes/restaurant');
 const customerRouter = require('./routes/customer');
+const riderRouter = require('./routes/rider');
 
 // mongodb credentials
 const username = process.env.APP_USERNAME;
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(authRouter);
 app.use(restaurantRouter);
 app.use(customerRouter);
+app.use(riderRouter);
 
 // Connections
 mongoose
