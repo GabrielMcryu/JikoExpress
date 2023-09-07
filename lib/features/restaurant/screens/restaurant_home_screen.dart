@@ -3,9 +3,6 @@ import './restaurant_account_screen.dart';
 import './restaurant_meal_screen.dart';
 import './restaurant_rider_screen.dart';
 import './restaurant_order_screen.dart';
-
-import 'package:jiko_express/features/restaurant/widgets/single_meal.dart';
-import './restaurant_add_meal_screen.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantHomeScreen extends StatefulWidget {

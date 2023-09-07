@@ -11,9 +11,7 @@ riderRouter.get('/rider/get-assigned-orders', rider, async (req, res) => {
     const riderData = await Rider.findOne({ userId: user._id });
 
     if (!riderData) {
-      return res
-        .status(404)
-        .json({ error: 'Restaurant not found for this user' });
+      return res.status(404).json({ error: 'Rider not found for this user' });
     }
 
     const orders = await Order.find({ riderId: riderData._id, status: 1 });

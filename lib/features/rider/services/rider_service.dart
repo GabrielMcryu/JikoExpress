@@ -14,7 +14,7 @@ class RiderServices {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     List<Order> orderList = [];
     try {
-      http.Response res = await http.get(Uri.parse('$uri/restaurant/get-restaurant-orders'), headers: {
+      http.Response res = await http.get(Uri.parse('$uri/rider/get-assigned-orders'), headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': userProvider.user.token,
       });
@@ -50,7 +50,7 @@ class RiderServices {
 
     try {
       http.Response res = await http.post(
-        Uri.parse('$uri/restaurant/assign-order-to-rider'),
+        Uri.parse('$uri/rider/complete-order'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': userProvider.user.token,

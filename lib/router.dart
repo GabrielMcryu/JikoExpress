@@ -18,6 +18,7 @@ import 'features/customer/screens/customer_restaurant_meal_screen.dart';
 import 'features/customer/screens/customer_meal_detail_screen.dart';
 import 'features/customer/screens/customer_address_screen.dart';
 import 'features/customer/screens/customer_order_detail_screen.dart';
+import 'features/rider/screens/rider_order_details_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
     switch(routeSettings.name) {
@@ -101,16 +102,24 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
             orderId: orderId,
           ),
         );
-      case RiderHomeScreen.routeName:
-        return MaterialPageRoute(
-          settings: routeSettings,
-          builder: (_) => const RiderHomeScreen(),
-        );
       case RestaurantOrderDetailsScreen.routeName:
         var order = routeSettings.arguments as Order;
         return MaterialPageRoute(
           settings: routeSettings,
           builder: (_) => RestaurantOrderDetailsScreen(
+            order: order,
+          ),
+        );
+      case RiderHomeScreen.routeName:
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => const RiderHomeScreen(),
+        );
+      case RiderOrderDetailsScreen.routeName:
+        var order = routeSettings.arguments as Order;
+        return MaterialPageRoute(
+          settings: routeSettings,
+          builder: (_) => RiderOrderDetailsScreen(
             order: order,
           ),
         );
