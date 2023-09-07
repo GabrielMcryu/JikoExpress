@@ -1,6 +1,5 @@
-import 'package:jiko_express/constants/global_variables.dart';
-import './rider_order_screen.dart';
-import './rider_account_screen.dart';
+import 'package:jiko_express/common/widgets/custom_button.dart';
+import 'package:jiko_express/features/auth/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class RiderAccountScreen extends StatefulWidget {
@@ -11,17 +10,23 @@ class RiderAccountScreen extends StatefulWidget {
 }
 
 class _RiderAccountScreenState extends State<RiderAccountScreen> {
+  AuthService authService = AuthService();
+  void logout() {
+    authService.logOut(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          "Rider Account Screen",
-          style: TextStyle(
-            fontSize: 24, // Adjust the font size as needed
-            fontWeight: FontWeight.bold, // Adjust the font weight as needed
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomButton(
+            text: 'Logout',
+            onTap: logout,
           ),
-        ),
+        ],
       ),
     );
   }

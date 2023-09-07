@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jiko_express/common/widgets/custom_button.dart';
+import 'package:jiko_express/features/auth/services/auth_service.dart';
 
 class CustomerAccountScreen extends StatefulWidget {
   const CustomerAccountScreen({super.key});
@@ -8,18 +10,24 @@ class CustomerAccountScreen extends StatefulWidget {
 }
 
 class _CustomerAccountScreenState extends State<CustomerAccountScreen> {
+  AuthService authService = AuthService();
+  void logout() {
+    authService.logOut(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: Center(
-          child: Text(
-            "Customer Home Page",
-            style: TextStyle(
-              fontSize: 24, // Adjust the font size as needed
-              fontWeight: FontWeight.bold, // Adjust the font weight as needed
-            ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomButton(
+              text: 'Logout',
+              onTap: logout,
           ),
-        )
+        ],
+      ),
     );
   }
 }

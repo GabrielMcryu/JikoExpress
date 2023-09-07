@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:jiko_express/constants/error_handling.dart';
 import 'package:jiko_express/constants/global_variables.dart';
 import 'package:jiko_express/constants/utils.dart';
+import 'package:jiko_express/features/auth/screens/auth_screen.dart';
 import 'package:jiko_express/providers/user_provider.dart';
 import 'package:jiko_express/features/customer/screens/customer_home_screen.dart';
 import 'package:jiko_express/features/restaurant/screens/restaurant_home_screen.dart';
@@ -239,6 +240,22 @@ class AuthService {
         userProvider.setUser(userRes.body);
       }
     } catch(e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  void logOut(BuildContext context) async {
+    try {
+      SharedPreferences sharedPreferences =
+      await SharedPreferences.getInstance();
+      await sharedPreferences.setString('x-auth-token', '');
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamedAndRemoveUntil(
+          context,
+          AuthScreen.routeName,
+              (route) => false
+      );
+    } catch (e) {
       showSnackBar(context, e.toString());
     }
   }
