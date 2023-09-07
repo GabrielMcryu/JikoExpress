@@ -1,45 +1,74 @@
+import 'dart:io';
 import 'package:jiko_express/common/widgets/loader.dart';
+import 'package:jiko_express/common/widgets/custom_button.dart';
+import 'package:jiko_express/common/widgets/custom_textfield.dart';
 import 'package:jiko_express/constants/global_variables.dart';
-import './restaurant_hire_rider_screen.dart';
+import 'package:jiko_express/constants/utils.dart';
 import 'package:jiko_express/features/restaurant/services/restaurant_services.dart';
 import 'package:jiko_express/models/rider.dart';
 import 'package:flutter/material.dart';
 
-class RestaurantRiderScreen extends StatefulWidget {
-  const RestaurantRiderScreen({super.key});
+class RestaurantHireRiderScreen extends StatefulWidget {
+  static const String routeName = '/hire-rider';
+  const RestaurantHireRiderScreen({super.key});
 
   @override
-  State<RestaurantRiderScreen> createState() => _RestaurantRiderScreenState();
+  State<RestaurantHireRiderScreen> createState() => _RestaurantHireRiderScreenState();
 }
 
-class _RestaurantRiderScreenState extends State<RestaurantRiderScreen> {
+class _RestaurantHireRiderScreenState extends State<RestaurantHireRiderScreen> {
   List<Rider>? riders;
   final RestaurantServices restaurantServices = RestaurantServices();
 
   @override
   void initState() {
     super.initState();
-    fetchRestaurantRiders();
+    fetchFreeRiders();
   }
 
-  fetchRestaurantRiders() async {
-    riders = await restaurantServices.fetchRestaurantRiders(context);
+  fetchFreeRiders() async {
+    riders = await restaurantServices.fetchFreeRiders(context);
     setState(() {
 
     });
   }
 
-  void navigateToHireRider() {
-    Navigator.pushNamed(context, RestaurantHireRiderScreen.routeName);
+  void hireRider(Rider rider, int index) {
+    restaurantServices.hireRider(
+      context: context,
+      rider: rider,
+        onSuccess: () {
+          riders!.removeAt(index);
+          setState(() {
+
+          });
+        }
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return riders == null
-      ? const Loader()
-      : Scaffold(
-        body: ListView.builder(
-          itemCount: riders!.length,
+    return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: AppBar(
+            flexibleSpace: Container(
+              decoration: const BoxDecoration(
+                gradient: GlobalVariables.appBarGradient,
+              ),
+            ),
+            title: const Text(
+              'Hire Rider',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
+        body: riders == null
+            ? const Loader()
+            : ListView.builder(
+            itemCount: riders!.length,
             itemBuilder: (context, index) {
               final riderData = riders![index];
               return Container(
@@ -59,9 +88,9 @@ class _RestaurantRiderScreenState extends State<RestaurantRiderScreen> {
                     maxLines: 2,
                   ),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () => hireRider(riderData, index),
                     icon: const Icon(
-                      Icons.motorcycle_outlined,
+                      Icons.add_circle_outline_outlined,
                       color: GlobalVariables.secondaryColor,
                     ),
                   ),
@@ -69,12 +98,6 @@ class _RestaurantRiderScreenState extends State<RestaurantRiderScreen> {
               );
             }
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: navigateToHireRider,
-          tooltip: 'Hire Rider',
-          child: const Icon(Icons.add),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

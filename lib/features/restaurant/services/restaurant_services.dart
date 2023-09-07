@@ -4,6 +4,8 @@ import 'package:jiko_express/constants/error_handling.dart';
 import 'package:jiko_express/constants/global_variables.dart';
 import 'package:jiko_express/constants/utils.dart';
 import 'package:jiko_express/models/meal.dart';
+import 'package:jiko_express/models/rider.dart';
+import 'package:jiko_express/models/order.dart';
 import 'package:jiko_express/providers/user_provider.dart';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter/material.dart';
@@ -127,6 +129,192 @@ class RestaurantServices {
         onSuccess: () {
           onSuccess();
         },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<List<Rider>> fetchFreeRiders(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Rider> riderList = [];
+    try {
+      http.Response res = await http.get(Uri.parse('$uri/restaurant/get-free-riders'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      });
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for(int i = 0; i < jsonDecode(res.body).length; i++) {
+            riderList.add(
+              Rider.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return riderList;
+  }
+
+  void hireRider({
+    required BuildContext context,
+    required Rider rider,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/restaurant/hire-rider'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'id': rider.id,
+        }),
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: onSuccess,
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+  }
+
+  Future<List<Rider>> fetchRestaurantRiders(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Rider> riderList = [];
+    try {
+      http.Response res = await http.get(Uri.parse('$uri/restaurant/get-restaurant-riders'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      });
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for(int i = 0; i < jsonDecode(res.body).length; i++) {
+            riderList.add(
+              Rider.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return riderList;
+  }
+
+  Future<List<Rider>> fetchAvailableRestaurantRiders(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Rider> riderList = [];
+    try {
+      http.Response res = await http.get(Uri.parse('$uri/restaurant/get-available-restaurant-riders'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      });
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for(int i = 0; i < jsonDecode(res.body).length; i++) {
+            riderList.add(
+              Rider.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return riderList;
+  }
+
+  Future<List<Order>> fetchRestaurantOrders(BuildContext context) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    List<Order> orderList = [];
+    try {
+      http.Response res = await http.get(Uri.parse('$uri/restaurant/get-restaurant-orders'), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userProvider.user.token,
+      });
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: () {
+          for(int i = 0; i < jsonDecode(res.body).length; i++) {
+            orderList.add(
+              Order.fromJson(
+                jsonEncode(
+                  jsonDecode(res.body)[i],
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    return orderList;
+  }
+
+  void assignOrderToRider({
+    required BuildContext context,
+    required Rider rider,
+    required String orderId,
+    required VoidCallback onSuccess,
+  }) async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    try {
+      http.Response res = await http.post(
+        Uri.parse('$uri/restaurant/assign-order-to-rider'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': userProvider.user.token,
+        },
+        body: jsonEncode({
+          'orderId': orderId,
+          'riderId': rider.id,
+        }),
+      );
+
+      // ignore: use_build_context_synchronously
+      httpErrorHandle(
+        response: res,
+        context: context,
+        onSuccess: onSuccess,
       );
     } catch (e) {
       showSnackBar(context, e.toString());

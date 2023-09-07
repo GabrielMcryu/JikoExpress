@@ -87,12 +87,12 @@ class _RestaurantMealScreenState extends State<RestaurantMealScreen> {
             );
           },
         ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: navigateToAddMeal,
-        tooltip: 'Add a Meal',
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+          onPressed: navigateToAddMeal,
+          tooltip: 'Add a Meal',
+          child: const Icon(Icons.add),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
