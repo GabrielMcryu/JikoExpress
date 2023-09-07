@@ -1,9 +1,5 @@
-import 'dart:io';
 import 'package:jiko_express/common/widgets/loader.dart';
-import 'package:jiko_express/common/widgets/custom_button.dart';
-import 'package:jiko_express/common/widgets/custom_textfield.dart';
 import 'package:jiko_express/constants/global_variables.dart';
-import 'package:jiko_express/constants/utils.dart';
 import 'package:jiko_express/features/restaurant/services/restaurant_services.dart';
 import 'package:jiko_express/models/rider.dart';
 import 'package:flutter/material.dart';
